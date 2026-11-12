@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:#1b4f72;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color:#2c3e50;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    /* Header ANBK Style */
+    .app-header{
+      background:#1b4f72;
+      color:white;
+      padding:15px 25px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:2px solid #143d54;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .brand img{
+      width:40px;
+      height:40px;
+      object-fit:contain;
+    }
+    .brand-text h1{
+      font-size:16px;
+      margin:0;
+      font-weight:700;
+      letter-spacing:0.5px;
+    }
+    .brand-text span{
+      font-size:11px;
+      color:#cbd5e1;
+    }
+    .user-badge{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:13px;
+    }
+    .logout-btn{
+      background:#ffffff20;
+      border:1px solid #ffffff40;
+      color:white;
+      padding:5px 12px;
+      border-radius:4px;
+      cursor:pointer;
+      font-size:12px;
+    }
+    .logout-btn:hover{background:#ffffff30;}
+
+    /* Main Container */
+    .main-container{
+      flex:1;
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+
+    /* Card Box (Modal Style) */
+    .card{
+      background:white;
+      width:100%;
+      max-width:480px;
+      border-radius:8px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.2);
+      padding:35px 30px;
+      position:relative;
+    }
+
+    .card h2{
+      font-size:22px;
+      margin:0 0 8px;
+      color:#1e293b;
+      font-weight:600;
+    }
+    .card p.desc{
+      font-size:13px;
+      color:#64748b;
+      margin:0 0 24px;
+      line-height:1.4;
+    }
+
+    /* Form Fields */
+    label{
+      display:block;
+      font-size:12px;
+      font-weight:700;
+      color:#475569;
+      margin-bottom:6px;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+    }
+    .field{margin-bottom:18px}
+    input, select{
+      width:100%;
+      height:42px;
+      padding:0 12px;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      background:#f8fafc;
+      font-size:14px;
+      color:#1e293b;
+      outline:none;
+      transition:all 0.2s;
+    }
+    input:focus, select:focus{
+      border-color:#2563eb;
+      background:#ffffff;
+      box-shadow:0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Primary Button */
+    .btn-primary{
+      width:100%;
+      height:44px;
+      background:#2563eb;
+      color:white;
+      border:none;
+      border-radius:6px;
+      font-size:15px;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 4px 6px rgba(37, 99, 235, 0.2);
+      transition:background 0.2s;
+      margin-top:8px;
+    }
+    .btn-primary:hover{background:#1d4ed8;}
+    .btn-primary:disabled{background:#94a3b8;cursor:not-allowed;}
+
+    /* Detail / Confirmation Table List */
+    .info-list{
+      margin-bottom:20px;
+      border-bottom:1px solid #e2e8f0;
+      padding-bottom:15px;
+    }
+    .info-item{
+      display:flex;
+      justify-content:space-between;
+      font-size:13px;
+      margin-bottom:10px;
+    }
+    .info-item span:first-child{color:#64748b; font-weight:600;}
+    .info-item span:last-child{color:#1e293b; font-weight:700;}
+
+    /* Footer Copyright */
+    .footer-copy{
+      text-align:center;
+      font-size:11px;
+      color:rgba(255,255,255,0.7);
+      padding:15px;
+    }
+
+    /* Ruang Ujian Styles */
+    #ruangUjian{
+      width:100%;
+      max-width:900px;
+    }
+    .exam-top{
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:8px;
+      padding:15px 20px;
+      margin-bottom:15px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .timer-box{
+      font-size:24px;
+      font-weight:800;
+      color:#dc2626;
+      font-family:monospace;
+      background:#ffeeef;
+      padding:4px 12px;
+      border-radius:6px;
+      border:1px solid #fecaca;
+    }
+    iframe{
+      width:100%;
+      height:70vh;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      background:white;
+    }
+    .warning{
+      background:#fffbeb;
+      color:#b45309;
+      border:1px solid #fef3c7;
+      padding:10px 14px;
+      border-radius:6px;
+      font-size:12px;
+      margin-bottom:12px;
+    }
+    .btn-danger{
+      background:#dc2626;
+      margin-top:12px;
+    }
+    .btn-danger:hover{background:#b91c1c;}
+    .hidden{display:none!important;}
+
+    .message{
+      padding:10px 12px;
+      border-radius:6px;
+      font-size:13px;
+      margin-bottom:15px;
+      border-left:4px solid;
+    }
+    .error{background:#fef2f2; color:#991b1b; border-color:#ef4444;}
+    .success{background:#f0fdf4; color:#166534; border-color:#22c55e;}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER ANBK -->
+  <header class="app-header">
+    <div class="device-brand">
+      <div class="brand">
+        <img src="https://tse4.mm.bing.net/th/id/OIP.61TP9xRxoEclgDYWIYi_wwHaHP?r=0&pid=Api&h=220&P=0" alt="Logo">
+        <div class="brand-text">
+          <h1>PENILAIAN SUMATIF AKHIR SEMESTER</h1>
+          <span>SMA NEGERI 1 CIBUAYA</span>
+        </div>
+      </div>
+    </div>
+    <div class="user-badge" id="userBadgeHeader">
+      <span id="headerUsername"></span>
+      <button class="logout-btn hidden" id="btnLogout" onclick="location.reload()">Logout</button>
+    </div>
+  </header>
+
+  <!-- MAIN AREA -->
+  <div class="main-container">
+
+    <!-- MENU 1: LOGIN SISWA (Username & Password) -->
+    <div class="card" id="loginArea">
+      <h2>Selamat datang,</h2>
+      <p class="desc">Silahkan login dengan username dan password yang telah Anda miliki</p>
+      
+      <div id="pesanLogin"></div>
+
+      <div class="field">
+        <label>Username</label>
+        <input id="username" type="text" placeholder="Username / NISN">
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Password">
+      </div>
+
+      <button class="btn-primary" id="btnLogin" onclick="prosesLogin()">Login</button>
+    </div>
+
+    <!-- MENU 2: KONFIRMASI TES / SESI UJIAN (Pilih Mapel & Token) -->
+    <div class="card hidden" id="konfirmasiArea" style="max-width: 540px;">
+      <h2>Konfirmasi Tes</h2>
+      <p class="desc">Periksa kembali data tes, pilih mata pelajaran, dan masukkan token ujian Anda.</p>
+
+      <div id="pesanKonfirmasi"></div>
+
+      <div class="info-list">
+        <div class="info-item">
+          <span>Nama Peserta</span>
+          <span id="confNama">-</span>
+        </div>
+        <div class="info-item">
+          <span>Kelas / Rombel</span>
+          <span id="confKelas">-</span>
+        </div>
+        <div class="info-item">
+          <span>Status Tes</span>
+          <span style="color: #166534;">Tes Siap Dikerjakan</span>
+        </div>
+        <div class="info-item">
+          <span>Waktu Server</span>
+          <span id="confWaktu">-</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Mata Pelajaran Ujian</label>
+        <select id="mapelSelect">
+          <option value="">-- Pilih Mata Pelajaran --</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Token Ujian</label>
+        <input id="token" type="text" placeholder="Masukkan Token (6 Digit)" style="text-transform: uppercase; font-weight: bold; letter-spacing: 2px;">
+      </div>
+
+      <button class="btn-primary" id="btnMulai" onclick="mulaiUjianResmi()">MULAI</button>
+    </div>
+
+    <!-- RUANG UJIAN (Iframe & Timer) -->
+    <div class="hidden" id="ruangUjian">
+      <div class="exam-top">
+        <div>
+          <b id="infoNamaSiswa" style="font-size: 15px; color: #1e293b;"></b><br>
+          <span id="infoDetailMapel" style="font-size: 13px; color: #64748b;"></span>
+        </div>
+        <div style="text-align: right;">
+          <div style="font-size: 11px; color: #64748b; font-weight: 600;">SISA WAKTU</div>
+          <div class="timer-box" id="timer">60:00</div>
+        </div>
+      </div>
+
+      <div class="warning" id="peringatan">
+        ⚠️ Jangan keluar dari halaman ujian! Pelanggaran akan terekam otomatis oleh sistem pengawasan.
+      </div>
+
+      <iframe id="formUjian" allow="fullscreen"></iframe>
+
+      <button class="btn-primary btn-danger" onclick="konfirmasiSelesai()">
+        SELESAI / KUMPULKAN UJIAN
+      </button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-copy">
+    v12.9.1 - Copyright &copy; 2026, Kementerian Pendidikan dan Kebudayaan Indonesia
+  </div>
+
+<script>
+let sesiData = null;
+let timerInterval = null;
+let pelanggaranDiproses = false;
+let ujianBerakhir = false;
+let sisaWaktu = 0;
+
+function tampilPesan(elemenId, teks, jenis="error"){
+  document.getElementById(elemenId).innerHTML = `<div class="message ${jenis}">${teks}</div>`;
+}
+
+// 1. PROSES LOGIN (MENU 1)
+function prosesLogin(){
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value;
+
+  if(!username || !password){
+    tampilPesan("pesanLogin", "Username dan password wajib diisi!");
+    return;
+  }
+
+  const btn = document.getElementById("btnLogin");
+  btn.disabled = true;
+  btn.textContent = "MEMERIKSA...";
+
+  google.script.run
+    .withSuccessHandler(r => {
+      btn.disabled = false;
+      btn.textContent = "Login";
+
+      if(!r.success){
+        tampilPesan("pesanLogin", r.message);
+        return;
+      }
+
+      sesiData = r;
+
+      // Masukkan daftar mapel aktif ke dropdown dari sheet DataMapel
+      const selectMapel = document.getElementById("mapelSelect");
+      selectMapel.innerHTML = '<option value="">-- Pilih Mata Pelajaran --</option>';
+      r.listMapel.forEach(m => {
+        selectMapel.add(new Option(m, m));
+      });
+
+      // Pindah ke Menu 2 (Konfirmasi Tes)
+      document.getElementById("loginArea").classList.add("hidden");
+      document.getElementById("konfirmasiArea").classList.remove("hidden");
+
+      document.getElementById("confNama").textContent = r.nama;
+      document.getElementById("confKelas").textContent = r.kelas;
+      document.getElementById("confWaktu").textContent = new Date().toLocaleTimeString();
+      
+      document.getElementById("headerUsername").textContent = r.nama + " (" + r.kelas + ")";
+      document.getElementById("btnLogout").classList.remove("hidden");
+    })
+    .withFailureHandler(e => {
+      btn.disabled = false;
+      btn.textContent = "Login";
+      tampilPesan("pesanLogin", e.message);
+    })
+    .loginSiswa({ username, password });
+}
+
+// 2. PROSES MULAI UJIAN (MENU 2)
+function mulaiUjianResmi(){
+  const mapelDipilih = document.getElementById("mapelSelect").value;
+  const token = document.getElementById("token").value.trim();
+
+  if(!mapelDipilih){
+    tampilPesan("pesanKonfirmasi", "Silakan pilih mata pelajaran terlebih dahulu!");
+    return;
+  }
+
+  if(!token){
+    tampilPesan("pesanKonfirmasi", "Token ujian wajib diisi!");
+    return;
+  }
+
+  const btn = document.getElementById("btnMulai");
+  btn.disabled = true;
+  btn.textContent = "MEMVALIDASI TOKEN...";
+
+  google.script.run
+    .withSuccessHandler(r => {
+      btn.disabled = false;
+      btn.textContent = "MULAI";
+
+      if(!r.success){
+        tampilPesan("pesanKonfirmasi", r.message);
+        return;
+      }
+
+      sesiData.sessionId = r.sessionId;
+      sesiData.mapel = mapelDipilih;
+      sisaWaktu = Math.max(0, Math.floor((r.selesai - Date.now()) / 1000));
+
+      // Sembunyikan konfirmasi, buka ruang ujian
+      document.getElementById("konfirmasiArea").classList.add("hidden");
+      document.getElementById("ruangUjian").classList.remove("hidden");
+
+      document.getElementById("infoNamaSiswa").textContent = sesiData.nama;
+      document.getElementById("infoDetailMapel").textContent = mapelDipilih + " | Kelas: " + sesiData.kelas;
+      document.getElementById("formUjian").src = r.formUrl;
+
+      mulaiTimer();
+      aktifkanPengawasan();
+    })
+    .withFailureHandler(e => {
+      btn.disabled = false;
+      btn.textContent = "MULAI";
+      tampilPesan("pesanKonfirmasi", e.message);
+    })
+    .validasiTokenSiswa({
+      username: sesiData.username,
+      token: token,
+      mapel: mapelDipilih
+    });
+}
+
+function mulaiTimer(){
+  tampilTimer();
+  timerInterval = setInterval(() => {
+    sisaWaktu--;
+    tampilTimer();
+    if(sisaWaktu <= 0){
+      clearInterval(timerInterval);
+      akhiriUjian("WAKTU HABIS");
+    }
+  }, 1000);
+}
+
+function tampilTimer(){
+  const m = Math.floor(sisaWaktu / 60);
+  const s = sisaWaktu % 60;
+  document.getElementById("timer").textContent = String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+}
+
+function laporPelanggaran(jenis){
+  if(!sesiData || !sesiData.sessionId || ujianBerakhir || pelanggaranDiproses) return;
+  pelanggaranDiproses = true;
+
+  google.script.run
+    .withSuccessHandler(r => {
+      pelanggaranDiproses = false;
+      if(!r.success) return;
+      if(r.diskualifikasi){
+        akhiriUjian("DISKUALIFIKASI");
+      }else{
+        alert("PERINGATAN PELANGGARAN KE-" + r.jumlah + " dari " + r.maksimal + "\nAlasan: " + jenis);
+      }
+    })
+    .withFailureHandler(() => { pelanggaranDiproses = false; })
+    .catatPelanggaran(sesiData.sessionId, jenis);
+}
+
+function aktifkanPengawasan(){
+  document.addEventListener("visibilitychange", () => {
+    if(document.hidden) laporPelanggaran("Keluar Aplikasi / Pindah Tab");
+  });
+  window.addEventListener("blur", () => {
+    laporPelanggaran("Kehilangan Fokus Layar");
+  });
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("copy", e => e.preventDefault());
+  document.addEventListener("cut", e => e.preventDefault());
+  document.addEventListener("paste", e => e.preventDefault());
+
+  const elem = document.documentElement;
+  if(elem.requestFullscreen){
+    elem.requestFullscreen().catch(()=>{});
+  }
+}
+
+function konfirmasiSelesai(){
+  if(confirm("Apakah Anda yakin ingin menyelesaikan ujian?")){
+    akhiriSelesai("SELESAI");
+  }
+}
+
+function akhiriSelesai(status){
+  if(ujianBerakhir) return;
+  ujianBerakhir = true;
+  clearInterval(timerInterval);
+
+  document.getElementById("ruangUjian").innerHTML = 
+    `<div class="card" style="text-align:center; padding: 40px; margin: auto;">
+      <h2>${status === "DISKUALIFIKASI" ? "UJIAN DIDISKUALIFIKASI" : "UJIAN TELAH SELESAI"}</h2>
+      <p class="desc">${status === "WAKTU HABIS" ? "Alokasi waktu ujian Anda telah habis." : status === "DISKUALIFIKASI" ? "Anda melebihi batas maksimal pelanggaran." : "Terima kasih telah mengikuti asesmen dengan tertib."}</p>
+      <button class="btn-primary" onclick="location.reload()">Kembali ke Beranda</button>
+    </div>`;
+
+  if(sesiData && sesiData.sessionId){
+    google.script.run.selesaiUjian(sesiData.sessionId);
+  }
+}
+
+function akhiriUjian(status){
+  akhiriSelesai(status);
+}
+</script>
+</body>
+</html>
